@@ -176,7 +176,7 @@ with st.sidebar:
         st.image(str(RUTA_LOGO), width="stretch")
     else:
         st.markdown('<div class="fd-brand">FD <span>⚡</span> Energy</div>', unsafe_allow_html=True)
-    st.markdown('<div class="fd-tag">Gestión y eficiencia energética · MVP académico</div>', unsafe_allow_html=True)
+    st.markdown('<div class="fd-tag">Gestión y eficiencia energética</div>', unsafe_allow_html=True)
     st.write("")
     seccion = st.radio("Sección", SECCIONES, label_visibility="collapsed")
     st.divider()
