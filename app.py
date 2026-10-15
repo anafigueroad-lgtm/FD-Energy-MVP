@@ -20,7 +20,10 @@ import pipeline as pl
 # =============================================================================
 st.set_page_config(page_title="FD Energy · MVP", page_icon="⚡", layout="wide")
 
-RUTA_DEMO = Path(__file__).parent / "data" / "FD_Energy_BASE_MVP.xlsx"
+_DIR = Path(__file__).parent
+# Busca la base de demostración en data/ o junto a app.py (útil al subir los archivos a GitHub desde el navegador)
+RUTA_DEMO = next((p for p in [_DIR / "data" / "FD_Energy_BASE_MVP.xlsx", _DIR / "FD_Energy_BASE_MVP.xlsx"] if p.exists()),
+                 _DIR / "data" / "FD_Energy_BASE_MVP.xlsx")
 NAVY, INK, MUTED, GRID, BAND = "#1F3A5C", "#1F2E45", "#6B7480", "#E3E7EC", "#F1F4F7"
 SOLAR, IMPORT, NO_ASIG, ALERTA, OK = "#D4A72C", "#8FA3B8", "#C9CED4", "#B5523B", "#3F7D63"
 PALETA = ["#1F3A5C", "#6E9C9A", "#B09A78", "#A4889B", "#7E8A97", "#4F6D8F", "#9DB4AB"]
@@ -113,7 +116,10 @@ def estilo(fig, alto=360, leyenda=True, x_fecha=False):
         bargap=0.25)
     fig.update_xaxes(showgrid=False, linecolor=GRID, ticks="outside", tickcolor=GRID)
     if x_fecha:
-        fig.update_xaxes(tickformat="%m/%Y" if frecuencia == "MS" else "%d/%m", hoverformat="%d/%m/%Y")
+        if frecuencia == "MS":
+            fig.update_xaxes(tickformat="%m/%Y", dtick="M1", hoverformat="%m/%Y")
+        else:
+            fig.update_xaxes(tickformat="%d/%m", hoverformat="%d/%m/%Y")
     fig.update_yaxes(gridcolor=GRID, zeroline=False, linecolor=GRID)
     return fig
 
