@@ -22,6 +22,8 @@ st.set_page_config(page_title="FD Energy · MVP", page_icon="⚡", layout="wide"
 
 _DIR = Path(__file__).parent
 # Busca la base de demostración en data/ o junto a app.py (útil al subir los archivos a GitHub desde el navegador)
+RUTA_LOGO = next((p for p in [_DIR / "FD_Energy_logo.png", _DIR / "FD_Energy_logo_color_transparente.png",
+                              _DIR / "assets" / "FD_Energy_logo.png"] if p.exists()), None)
 RUTA_DEMO = next((p for p in [_DIR / "data" / "FD_Energy_BASE_MVP.xlsx", _DIR / "FD_Energy_BASE_MVP.xlsx"] if p.exists()),
                  _DIR / "data" / "FD_Energy_BASE_MVP.xlsx")
 NAVY, INK, MUTED, GRID, BAND = "#1F3A5C", "#1F2E45", "#6B7480", "#E3E7EC", "#F1F4F7"
@@ -31,8 +33,6 @@ COLOR_PRIORIDAD = {"alta": "#B5523B", "atencion": "#D4A72C", "informativa": "#7E
 NOMBRE_PRIORIDAD = {"alta": "Alta", "atencion": "Atención", "informativa": "Informativa"}
 SECCIONES = ["Resumen general", "Consumo por áreas", "Equipos críticos",
              "Energía solar", "Climatización", "Alertas y oportunidades"]
-ICONOS = {"Resumen general": "📊", "Consumo por áreas": "🏭", "Equipos críticos": "⚙️",
-          "Energía solar": "☀️", "Climatización": "❄️", "Alertas y oportunidades": "🔔"}
 
 st.markdown(f"""
 <style>
@@ -58,7 +58,7 @@ st.markdown(f"""
   [data-testid="stSidebar"] {{background: {BAND};}}
   .fd-brand {{font-size: 1.45rem; font-weight: 800; color: {NAVY}; letter-spacing: -0.02em;}}
   .fd-brand span {{color: {SOLAR};}}
-  .fd-tag {{color: {MUTED}; font-size: .8rem; margin-top: -4px;}}
+  .fd-tag {{color: {MUTED}; font-size: .8rem; margin-top: 2px;}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -102,7 +102,7 @@ def tarjeta(col, etiqueta, valor, unidad="", delta="", pie="", clase=""):
 
 def encabezado(titulo, P):
     a, b = P["actual"]
-    st.markdown(f'<div class="fd-head"><h1>{ICONOS[titulo]} {titulo}</h1>'
+    st.markdown(f'<div class="fd-head"><h1>{titulo}</h1>'
                 f'<p>Periodo: {fecha(a)} – {fecha(b)} ({P["dias"]} días) · Datos históricos de demostración</p></div>',
                 unsafe_allow_html=True)
 
@@ -172,10 +172,13 @@ def indicadores(_ctx, clave, ini, fin, frecuencia):
 # Barra lateral: navegación y filtros globales
 # =============================================================================
 with st.sidebar:
-    st.markdown('<div class="fd-brand">FD <span>⚡</span> Energy</div>'
-                '<div class="fd-tag">Gestión y eficiencia energética · MVP académico</div>', unsafe_allow_html=True)
+    if RUTA_LOGO:
+        st.image(str(RUTA_LOGO), width="stretch")
+    else:
+        st.markdown('<div class="fd-brand">FD <span>⚡</span> Energy</div>', unsafe_allow_html=True)
+    st.markdown('<div class="fd-tag">Gestión y eficiencia energética · MVP académico</div>', unsafe_allow_html=True)
     st.write("")
-    seccion = st.radio("Sección", SECCIONES, format_func=lambda s: f"{ICONOS[s]}  {s}", label_visibility="collapsed")
+    seccion = st.radio("Sección", SECCIONES, label_visibility="collapsed")
     st.divider()
 
     st.markdown("**Fuente de datos**")
@@ -308,7 +311,7 @@ def vista_resumen():
         <b>Oportunidades identificadas:</b> {len(R["oportunidades"])}
         </div>""", unsafe_allow_html=True)
         st.write("")
-        st.caption("💲 " + co["nota"])
+        st.caption(co["nota"])
         st.markdown('<div class="fd-future"><b>Funcionalidades futuras</b> (no calculadas en esta versión): '
                     'ahorros comprobados, ROI y periodo de recuperación. Requieren una línea base validada, '
                     'mediciones posteriores a una mejora y costos de inversión que la base actual no contiene.</div>',
@@ -634,7 +637,7 @@ def vista_alertas():
     tarjeta(c3, "Área con más alertas", res["area_con_mas_alertas"] or "—", "", "", "Incluye alertas de sus equipos", "neutral")
     tarjeta(c4, "Oportunidades identificadas", len(op), "", "", "Regla R7 · requieren revisión técnica", "solar")
 
-    t1, t2, t3 = st.tabs(["🔔 Alertas históricas detectadas", "💡 Oportunidades identificadas", "📋 Reglas evaluadas"])
+    t1, t2, t3 = st.tabs(["Alertas históricas detectadas", "Oportunidades identificadas", "Reglas evaluadas"])
     with t1:
         if al.empty:
             st.success("No se detectaron alertas históricas en el periodo seleccionado.", icon="✅")
