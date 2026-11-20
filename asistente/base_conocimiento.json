@@ -1,0 +1,614 @@
+{
+  "version": 1,
+  "notas": "Respuestas redactadas a partir de los textos y la lógica de app.py y pipeline.py. Los marcadores {{...}} se completan con datos de la base cargada (motor.py). Para agregar una pregunta: copie un bloque, asigne un id único y añada variantes y palabras clave.",
+  "faq": [
+    {
+      "id": "indicadores",
+      "categoria": "Indicadores",
+      "pregunta": "¿Cómo interpreto los indicadores de consumo energético?",
+      "variantes": [
+        "como interpreto los indicadores",
+        "que significan los indicadores del resumen",
+        "como leo el resumen general",
+        "que quiere decir cada tarjeta",
+        "no entiendo los kpis",
+        "que es el consumo de planta",
+        "que significa la flecha roja o verde",
+        "que es el consumo promedio diario",
+        "que es la completitud de datos",
+        "que es el consumo"
+      ],
+      "palabras_clave": [
+        "indicador",
+        "kpi",
+        "tarjeta",
+        "resumen",
+        "interpretar",
+        "leer",
+        "consumo planta",
+        "promedio diario",
+        "completitud",
+        "flecha"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "En **Resumen general** cada tarjeta resume el periodo elegido en la barra lateral:\n\n- **Consumo de planta (kWh):** energía que usó la planta = importación de red + generación FV − exportación a red. Sólo se suma en días con *balance completo* (los tres medidores con el 100 % de sus intervalos válidos).\n- **Costo energético estimado (MXN):** importación × costo promedio por kWh vigente. Es una estimación, no la factura.\n- **Generación solar (kWh)** y **Generación / consumo (%)**: lo que produjo el sistema fotovoltaico y su proporción frente al consumo de planta.\n- **Importación** y **Exportación a red**, **Consumo promedio diario** (sobre días con balance completo) y **Completitud de datos** (intervalos válidos / esperados de todos los medidores).\n\nDebajo del valor aparece la **variación contra el periodo anterior comparable** (misma duración, inmediatamente previo). En consumo, ▲ en tono terracota indica un aumento de 5 % o más; en verde, una reducción de 5 % o más; en gris, un cambio menor. En generación solar la lógica de color se invierte. Si la variación dice **«Ref. promedio diario»** o **«No disponible»**, consulta la pregunta sobre variaciones.",
+      "relacionadas": [
+        "variaciones",
+        "importacion_exportacion",
+        "datos_incompletos"
+      ]
+    },
+    {
+      "id": "importacion_exportacion",
+      "categoria": "Indicadores",
+      "pregunta": "¿Qué significa la importación neta y la exportación neta?",
+      "variantes": [
+        "que es la importacion neta",
+        "que es la exportacion neta",
+        "que significa importacion de red",
+        "que significa exportacion a red",
+        "que es la energia que vendo a la red",
+        "diferencia entre importacion y exportacion",
+        "como se calcula el balance de la planta",
+        "que es el balance de energia"
+      ],
+      "palabras_clave": [
+        "importacion",
+        "exportacion",
+        "neta",
+        "neto",
+        "red",
+        "cfe",
+        "balance",
+        "excedente"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "El dashboard no calcula un indicador llamado «importación neta» o «exportación neta»; trabaja con tres mediciones del balance de la planta:\n\n- **Importación de red:** energía que la planta tomó de la red eléctrica.\n- **Exportación a red:** excedente de la generación fotovoltaica que se entregó a la red.\n- **Generación FV:** lo que produjo el sistema solar.\n\nCon ellas se calcula **consumo de planta = importación + generación FV − exportación**. Ese balance sólo se calcula en días en que los tres medidores están completos; si falta uno, el día no se suma ni se interpreta como cero.\n\nEn **Energía solar** también verás la **FV autoconsumida = generación − exportación**, es decir, la parte de la generación que usó la propia planta.",
+      "relacionadas": [
+        "indicadores",
+        "energia_solar",
+        "datos_incompletos"
+      ]
+    },
+    {
+      "id": "consumo_areas",
+      "categoria": "Módulos",
+      "pregunta": "¿Cómo funciona el módulo de consumo por áreas?",
+      "variantes": [
+        "como funciona consumo por areas",
+        "que muestra el modulo de areas",
+        "como se calcula la participacion de cada area",
+        "que es el consumo no asignado",
+        "que son los dias comparables",
+        "por que las areas no suman 100",
+        "que area consume mas",
+        "que significa residual negativo"
+      ],
+      "palabras_clave": [
+        "area",
+        "areas",
+        "participacion",
+        "no asignado",
+        "comparables",
+        "submedidor",
+        "residual",
+        "porcentaje"
+      ],
+      "seccion": "Consumo por áreas",
+      "respuesta": "**Consumo por áreas** reparte el consumo de planta entre las áreas que tienen submedidor:\n\n- **Días comparables:** días con balance de planta completo y *todos* los submedidores de área completos. Las participaciones usan esos mismos días en el numerador y el denominador.\n- **Área de mayor consumo** y su **participación (%)** sobre el consumo de planta.\n- **Mayor incremento:** el área con el aumento más alto contra el periodo anterior, sólo con variación del total y si el periodo anterior alcanza el consumo mínimo que fija la regla R1.\n- **Consumo no asignado = consumo de planta − suma de áreas medidas.** Representa cargas sin submedidor y pérdidas; es un indicador de balance, no un área. Si es negativo, la suma de áreas supera a la planta y conviene revisar la configuración o calibración de los medidores (no se ajusta el valor).\n\nPor eso las participaciones no se fuerzan a sumar 100 %. La gráfica de evolución sólo usa días completos de cada área; los días parciales aparecen como huecos.",
+      "relacionadas": [
+        "equipos_criticos",
+        "datos_incompletos",
+        "regla_R6"
+      ]
+    },
+    {
+      "id": "equipos_criticos",
+      "categoria": "Módulos",
+      "pregunta": "¿Qué son los equipos críticos?",
+      "variantes": [
+        "que son los equipos criticos",
+        "que significa equipo prioritario",
+        "como funciona el modulo de equipos",
+        "por que un equipo no tiene consumo",
+        "equipos sin medicion individual",
+        "que es el porcentaje del consumo de su area",
+        "como veo el consumo de una maquina"
+      ],
+      "palabras_clave": [
+        "equipo",
+        "equipos",
+        "critico",
+        "criticos",
+        "prioritario",
+        "maquina",
+        "compresor",
+        "motor",
+        "medicion individual"
+      ],
+      "seccion": "Equipos críticos",
+      "respuesta": "Los **equipos críticos** son los equipos marcados como de *monitoreo prioritario* en la base de datos de la planta.\n\n- Sólo los equipos con **medición individual** (un medidor propio) tienen consumo calculado. Los prioritarios sin medidor se listan, pero su consumo **no se estima**.\n- Puedes ver sólo los **prioritarios** o **todos los equipos con medición**.\n- La tabla muestra kWh en días completos, promedio diario, **% del consumo de su área** (calculado sólo en días en que el equipo y el submedidor de su área están completos), variación contra el periodo anterior y alertas del periodo.\n- **Mayor incremento** considera sólo variaciones del total con un periodo anterior que alcanza el mínimo de la regla R1.\n\nUna variación o alerta indica un comportamiento a revisar, no una falla del equipo.",
+      "relacionadas": [
+        "alertas_reglas",
+        "oportunidades",
+        "consumo_areas"
+      ]
+    },
+    {
+      "id": "alertas_reglas",
+      "categoria": "Alertas",
+      "pregunta": "¿Qué significan las alertas y las reglas R1–R6?",
+      "variantes": [
+        "que significan las alertas",
+        "que son las reglas r1 a r6",
+        "como funcionan las alertas",
+        "que es una alerta historica",
+        "que significa prioridad alta",
+        "que significa atencion o informativa",
+        "por que me salio una alerta",
+        "explicame las reglas"
+      ],
+      "palabras_clave": [
+        "alerta",
+        "alertas",
+        "regla",
+        "reglas",
+        "prioridad",
+        "umbral",
+        "historica",
+        "r1",
+        "r6"
+      ],
+      "seccion": "Alertas y oportunidades",
+      "respuesta": "Las **alertas históricas** son observaciones automáticas: condiciones que superaron un umbral en los datos ya registrados. El dashboard muestra las que tienen su **fecha evaluada** dentro del periodo elegido. No hay alertas en tiempo real, y una alerta **no diagnostica una falla** ni sustituye una evaluación técnica.\n\nLas prioridades son **Alta**, **Atención** e **Informativa**. Estas son las reglas configuradas en la base cargada:\n\n{{reglas}}\n\nSi en un periodo no hay datos suficientes, la regla **no se evalúa** (no equivale a «sin alerta»). Esas omisiones aparecen en la pestaña *Reglas evaluadas*. Puedes preguntarme por una regla concreta, por ejemplo «¿qué es la R4?».",
+      "relacionadas": [
+        "oportunidades",
+        "datos_incompletos",
+        "equipos_criticos"
+      ]
+    },
+    {
+      "id": "oportunidades",
+      "categoria": "Alertas",
+      "pregunta": "¿Cómo puedo identificar oportunidades de ahorro energético?",
+      "variantes": [
+        "como identifico oportunidades de ahorro",
+        "como puedo ahorrar energia",
+        "donde veo las oportunidades",
+        "que es la regla r7",
+        "que es una oportunidad",
+        "como reducir mi consumo",
+        "en que area puedo ahorrar"
+      ],
+      "palabras_clave": [
+        "oportunidad",
+        "oportunidades",
+        "ahorro",
+        "ahorrar",
+        "reducir",
+        "eficiencia",
+        "r7"
+      ],
+      "seccion": "Alertas y oportunidades",
+      "respuesta": "El dashboard identifica oportunidades con la regla **R7**, que señala áreas o equipos con mucho peso en el consumo y que además aumentaron:\n\n{{regla:R7}}\n\nPara revisarlas:\n\n1. Ve a **Alertas y oportunidades → Oportunidades identificadas**.\n2. Contrasta con **Consumo por áreas** (participación y mayor incremento) y **Equipos críticos** (% del consumo de su área y variación).\n3. Revisa las alertas de aumento de consumo (R1) del mismo elemento.\n\nEstas observaciones **requieren revisión técnica** antes de tomar decisiones. Los ahorros comprobados, el ROI y el periodo de recuperación aún no se calculan en esta versión. Si quieres evaluar una oportunidad con un especialista, puedo ponerte en contacto con un asesor de FD Energy.",
+      "relacionadas": [
+        "alertas_reglas",
+        "roi_ahorros",
+        "contacto"
+      ],
+      "ofrecer_contacto": true
+    },
+    {
+      "id": "contacto",
+      "categoria": "Soporte",
+      "pregunta": "¿Cómo puedo contactar a un asesor de FD Energy?",
+      "variantes": [
+        "como contacto a un asesor",
+        "quiero hablar con una persona",
+        "necesito ayuda de un humano",
+        "cual es el correo de fd energy",
+        "como los contacto",
+        "tienen whatsapp",
+        "quiero soporte",
+        "como me comunico con ustedes",
+        "medios de contacto",
+        "quiero que me llamen"
+      ],
+      "palabras_clave": [
+        "contacto",
+        "contactar",
+        "asesor",
+        "humano",
+        "persona",
+        "correo",
+        "email",
+        "whatsapp",
+        "soporte",
+        "llamar",
+        "telefono"
+      ],
+      "seccion": null,
+      "respuesta": "Puedes recibir atención personalizada del equipo de FD Energy:\n\n{{contacto}}",
+      "relacionadas": [
+        "precios_contratacion"
+      ],
+      "ofrecer_contacto": true
+    },
+    {
+      "id": "variaciones",
+      "categoria": "Indicadores",
+      "pregunta": "¿Qué significa «Ref. promedio diario» o «No disponible» en la variación?",
+      "variantes": [
+        "que significa ref promedio diario",
+        "por que la variacion dice no disponible",
+        "como se calcula la variacion",
+        "contra que periodo se compara",
+        "que es el periodo anterior comparable",
+        "por que no hay comparacion"
+      ],
+      "palabras_clave": [
+        "variacion",
+        "comparacion",
+        "referencia",
+        "promedio diario",
+        "no disponible",
+        "periodo anterior",
+        "comparar"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "La variación compara el periodo elegido con el **periodo anterior comparable**: la misma cantidad de días, inmediatamente antes. Hay tres casos:\n\n- **Variación del total:** ambos periodos tienen todos sus días completos; compara los totales.\n- **Ref. promedio diario:** hay días incompletos, pero al menos {{cobertura_ref}} de los días de cada periodo están completos. Compara el *promedio diario* de los días completos; es una referencia y **no equivale** a la variación del consumo total.\n- **No disponible:** el periodo anterior queda fuera del rango de datos, su valor es cero o la cobertura es insuficiente.\n\nPasa el cursor sobre la variación para ver la nota con la causa.",
+      "relacionadas": [
+        "datos_incompletos",
+        "indicadores",
+        "periodo_filtros"
+      ]
+    },
+    {
+      "id": "datos_incompletos",
+      "categoria": "Datos",
+      "pregunta": "¿Qué pasa con los días con datos incompletos?",
+      "variantes": [
+        "que es un dia incompleto",
+        "por que aparece balance incompleto",
+        "por que un dia no se suma",
+        "faltan datos de un medidor",
+        "que significa sin datos completos",
+        "que pasa con las lecturas faltantes",
+        "que son las lecturas estimadas"
+      ],
+      "palabras_clave": [
+        "incompleto",
+        "incompletos",
+        "faltante",
+        "faltan",
+        "completitud",
+        "lectura",
+        "lecturas",
+        "estimado",
+        "invalido",
+        "hueco",
+        "parcial"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "Un día está **completo** para un medidor cuando tiene el 100 % de sus intervalos válidos. Las lecturas **MEDIDO** y **ESTIMADO** se consideran válidas; las **FALTANTE** e **INVÁLIDO** no suman energía.\n\n- Los indicadores sólo suman días completos. Un día incompleto **no se interpreta como cero** y no se estiman las horas faltantes.\n- En las gráficas diarias esos días aparecen sombreados o como huecos, y un aviso indica qué medidor y qué fecha están afectados.\n- Un **cero medido** (el medidor reportó 0 con todos sus intervalos) sí es un dato registrado, distinto de la falta de lecturas.\n\nEl detalle está en el desplegable *Calidad de datos y validación del pipeline* de **Resumen general**.",
+      "relacionadas": [
+        "variaciones",
+        "regla_R5",
+        "indicadores"
+      ]
+    },
+    {
+      "id": "periodo_filtros",
+      "categoria": "Uso del dashboard",
+      "pregunta": "¿Cómo cambio el periodo y la frecuencia de las gráficas?",
+      "variantes": [
+        "como cambio las fechas",
+        "como selecciono el periodo",
+        "como veo los datos por semana o por mes",
+        "para que sirve la frecuencia",
+        "como cambio de planta",
+        "donde estan los filtros",
+        "como veo el consumo por semana",
+        "como veo el consumo por mes"
+      ],
+      "palabras_clave": [
+        "periodo",
+        "fechas",
+        "fecha",
+        "filtro",
+        "filtros",
+        "frecuencia",
+        "semana",
+        "semanal",
+        "mensual",
+        "diaria",
+        "planta"
+      ],
+      "seccion": null,
+      "respuesta": "Los filtros están en la **barra lateral**:\n\n- **Periodo:** elige fecha inicial y final dentro del rango disponible (aparece debajo de los filtros). Todos los indicadores y la comparación contra el periodo anterior se recalculan con ese rango.\n- **Frecuencia de las gráficas:** *Diaria*, *Semanal* (semanas de lunes a domingo, etiquetadas con el lunes) o *Mensual*. Cambia la agrupación de las gráficas, no los totales del periodo.\n- **Planta:** la base de demostración contiene una sola planta, por eso el selector está deshabilitado.",
+      "relacionadas": [
+        "variaciones",
+        "cargar_excel"
+      ]
+    },
+    {
+      "id": "costo_estimado",
+      "categoria": "Indicadores",
+      "pregunta": "¿Cómo se calcula el costo energético estimado?",
+      "variantes": [
+        "como se calcula el costo",
+        "por que el costo no coincide con mi recibo",
+        "el costo es mi factura de luz",
+        "que tarifa se usa",
+        "cuanto pago de luz"
+      ],
+      "palabras_clave": [
+        "costo",
+        "costos",
+        "factura",
+        "recibo",
+        "tarifa",
+        "pago",
+        "mxn",
+        "dinero",
+        "pesos"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "**Costo energético estimado = energía importada de la red × costo promedio por kWh** vigente en la base de datos (la tarjeta muestra el costo por kWh y su fuente).\n\nSólo se calcula en días con importación completa y costo vigente. **No equivale a la factura eléctrica real**: no incluye demanda, horarios tarifarios, factor de potencia ni otros cargos.",
+      "relacionadas": [
+        "indicadores",
+        "importacion_exportacion"
+      ]
+    },
+    {
+      "id": "energia_solar",
+      "categoria": "Módulos",
+      "pregunta": "¿Cómo interpreto la sección de energía solar?",
+      "variantes": [
+        "como funciona energia solar",
+        "que es el rendimiento especifico",
+        "que es la fv autoconsumida",
+        "por que la generacion salio en cero",
+        "que significa sin lecturas del inversor",
+        "cuanto generan mis paneles",
+        "el inversor marca cero",
+        "la generacion solar bajo"
+      ],
+      "palabras_clave": [
+        "solar",
+        "fotovoltaica",
+        "fv",
+        "paneles",
+        "inversor",
+        "generacion",
+        "rendimiento",
+        "kwp",
+        "autoconsumo",
+        "autoconsumida"
+      ],
+      "seccion": "Energía solar",
+      "respuesta": "**Energía solar** resume el sistema fotovoltaico:\n\n- **Generación FV** y **promedio diario**, sólo con días de lecturas completas del inversor.\n- **Rendimiento específico (kWh/kWp)** = generación del periodo / capacidad instalada.\n- **Generación / consumo de planta (%)**: proporción frente al consumo. No es autoconsumo.\n- **FV autoconsumida (%)** = (generación − exportación) / generación, y **Exportación a red** (excedente entregado).\n\nSe distinguen dos situaciones: **sin lecturas** (no se interpreta como cero y se excluye de totales) y **cero medido** (el inversor reportó 0 kWh con todos sus intervalos; la regla R4 lo identifica para revisión). Sin datos de irradiancia no es posible atribuir la causa de una baja generación.",
+      "relacionadas": [
+        "importacion_exportacion",
+        "regla_R3",
+        "regla_R4"
+      ]
+    },
+    {
+      "id": "climatizacion",
+      "categoria": "Módulos",
+      "pregunta": "¿Qué muestra la sección de climatización?",
+      "variantes": [
+        "como funciona climatizacion",
+        "cuanto consume el aire acondicionado",
+        "que es hvac",
+        "por que no veo el consumo por zonas",
+        "consumo de los equipos de clima"
+      ],
+      "palabras_clave": [
+        "climatizacion",
+        "hvac",
+        "aire",
+        "acondicionado",
+        "clima",
+        "enfriamiento",
+        "chiller",
+        "zonas"
+      ],
+      "seccion": "Climatización",
+      "respuesta": "**Climatización** analiza el área con uso predominante de climatización (su tablero):\n\n- **Consumo**, **promedio diario** y **participación en planta** (sólo con días en que el tablero y el balance de planta están completos).\n- Comparación día a día del **periodo actual contra el anterior**.\n- **Equipos HVAC medidos:** % del consumo del tablero de cada equipo con medición individual. Los equipos sin medidor se listan, y no se calcula la distribución por zonas.\n- Al final, las **alertas históricas** de climatización del periodo.",
+      "relacionadas": [
+        "equipos_criticos",
+        "alertas_reglas"
+      ]
+    },
+    {
+      "id": "cargar_excel",
+      "categoria": "Uso del dashboard",
+      "pregunta": "¿Puedo cargar mis propios datos en Excel?",
+      "variantes": [
+        "como cargo mi excel",
+        "puedo subir mis datos",
+        "que formato debe tener el archivo",
+        "que hojas necesita el excel",
+        "error al procesar el archivo",
+        "como uso mis propios datos"
+      ],
+      "palabras_clave": [
+        "excel",
+        "cargar",
+        "subir",
+        "archivo",
+        "xlsx",
+        "hojas",
+        "formato",
+        "datos propios",
+        "plantilla"
+      ],
+      "seccion": null,
+      "respuesta": "Sí. En la barra lateral, en **Fuente de datos**, elige **Cargar Excel** y sube un archivo **.xlsx con la misma estructura de hojas** que la base de demostración. Debe contener las hojas: {{hojas_base}}.\n\nMientras no cargues un archivo se usa la base de demostración. Si falta una hoja, el dashboard muestra un mensaje de error con las hojas faltantes. Para preparar tu archivo puedes pedir apoyo a un asesor.",
+      "relacionadas": [
+        "datos_incompletos",
+        "contacto"
+      ]
+    },
+    {
+      "id": "tiempo_real",
+      "categoria": "Uso del dashboard",
+      "pregunta": "¿Los datos se actualizan en tiempo real?",
+      "variantes": [
+        "los datos son en tiempo real",
+        "cada cuanto se actualiza",
+        "por que no veo los datos de hoy",
+        "esta conectado a mis medidores",
+        "las alertas me llegan al momento"
+      ],
+      "palabras_clave": [
+        "tiempo real",
+        "actualiza",
+        "actualizacion",
+        "hoy",
+        "conectado",
+        "vivo",
+        "en linea",
+        "automatico"
+      ],
+      "seccion": null,
+      "respuesta": "No. Esta versión es un **MVP académico** que procesa **información histórica**: el sistema no recibe datos en tiempo real. Los indicadores y las alertas se calculan a partir de la base cargada (de demostración o tu archivo Excel), y el rango disponible aparece en la barra lateral.",
+      "relacionadas": [
+        "cargar_excel",
+        "alertas_reglas"
+      ]
+    },
+    {
+      "id": "roi_ahorros",
+      "categoria": "Uso del dashboard",
+      "pregunta": "¿El dashboard calcula ahorros, ROI o periodo de recuperación?",
+      "variantes": [
+        "cuanto voy a ahorrar",
+        "calcula el roi",
+        "cual es el periodo de recuperacion",
+        "ahorros comprobados",
+        "retorno de inversion"
+      ],
+      "palabras_clave": [
+        "roi",
+        "retorno",
+        "recuperacion",
+        "payback",
+        "inversion",
+        "ahorros comprobados",
+        "rentabilidad"
+      ],
+      "seccion": "Resumen general",
+      "respuesta": "Todavía no. Los **ahorros comprobados, el ROI y el periodo de recuperación** son funcionalidades futuras: requieren una línea base validada, mediciones posteriores a una mejora y costos de inversión que la base actual no contiene. Para una evaluación de ese tipo puedes contactar a un asesor de FD Energy.",
+      "relacionadas": [
+        "oportunidades",
+        "contacto"
+      ],
+      "ofrecer_contacto": true
+    },
+    {
+      "id": "precios_contratacion",
+      "categoria": "Soporte",
+      "pregunta": "¿Cuánto cuesta o cómo contrato los servicios de FD Energy?",
+      "variantes": [
+        "cuanto cuesta",
+        "cual es el precio",
+        "como contrato el servicio",
+        "quiero una cotizacion",
+        "cuanto cuesta instalar paneles solares",
+        "venden equipos",
+        "quiero instalar medidores"
+      ],
+      "palabras_clave": [
+        "precio",
+        "precios",
+        "cuesta",
+        "costar",
+        "cotizacion",
+        "cotizar",
+        "contratar",
+        "contrato",
+        "comprar",
+        "instalar",
+        "instalacion",
+        "financiamiento",
+        "venden",
+        "plan"
+      ],
+      "seccion": null,
+      "respuesta": "No tengo información de precios, cotizaciones ni condiciones de contratación, y prefiero no darte datos que no pueda confirmar. Un asesor de FD Energy puede atenderte de forma personalizada:\n\n{{contacto}}",
+      "relacionadas": [
+        "contacto"
+      ],
+      "ofrecer_contacto": true
+    }
+  ],
+  "cortesia": {
+    "saludos": [
+      "hola",
+      "buenas",
+      "buenos dias",
+      "buenas tardes",
+      "buenas noches",
+      "que tal",
+      "hey",
+      "holi"
+    ],
+    "agradecimientos": [
+      "gracias",
+      "muchas gracias",
+      "mil gracias",
+      "perfecto gracias",
+      "ok gracias",
+      "listo gracias",
+      "excelente"
+    ],
+    "respuesta_saludo": "¡Hola! Soy el asistente de FD Energy. Te ayudo con el uso del dashboard y la interpretación de sus indicadores. ¿Qué te gustaría saber?",
+    "respuesta_agradecimiento": "¡Con gusto! Si tienes otra duda, aquí estoy."
+  },
+  "sinonimos": {
+    "luz": "energia",
+    "electricidad": "energia",
+    "electrica": "energia",
+    "electrico": "energia",
+    "fotovoltaica": "solar",
+    "fotovoltaico": "solar",
+    "fv": "solar",
+    "paneles": "solar",
+    "panel": "solar",
+    "placas": "solar",
+    "kpi": "indicador",
+    "kpis": "indicador",
+    "metrica": "indicador",
+    "metricas": "indicador",
+    "tarjetas": "tarjeta",
+    "maquina": "equipo",
+    "maquinas": "equipo",
+    "maquinaria": "equipo",
+    "aire": "climatizacion",
+    "clima": "climatizacion",
+    "hvac": "climatizacion",
+    "minisplit": "climatizacion",
+    "cotizar": "cotizacion",
+    "presupuesto": "cotizacion",
+    "mail": "correo",
+    "email": "correo",
+    "e-mail": "correo",
+    "whats": "whatsapp",
+    "wsp": "whatsapp",
+    "humano": "asesor",
+    "persona": "asesor",
+    "ejecutivo": "asesor",
+    "agente": "asesor",
+    "aviso": "alerta",
+    "avisos": "alerta",
+    "notificacion": "alerta",
+    "notificaciones": "alerta",
+    "gasto": "consumo",
+    "gasta": "consumo",
+    "consume": "consumo",
+    "consumen": "consumo"
+  }
+}
