@@ -60,6 +60,19 @@ st.markdown(f"""
   .fd-brand {{font-size: 1.45rem; font-weight: 800; color: {NAVY}; letter-spacing: -0.02em;}}
   .fd-brand span {{color: {SOLAR};}}
   .fd-tag {{color: {MUTED}; font-size: .8rem; margin-top: 2px;}}
+    /* Menús de la barra lateral: sólo el nombre (sin círculo); resaltado al pasar el cursor y al seleccionar */
+  [data-testid="stSidebar"] [role="radiogroup"] {{gap: 2px; width: 100%;}}
+  [data-testid="stSidebar"] [role="radiogroup"] > div {{width: 100%;}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]) {{
+      width: 100%; margin: 0; padding: .42rem .8rem; border-radius: 8px; cursor: pointer;
+      border-left: 3px solid transparent; transition: background .15s ease;}}
+  [data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child,
+  [data-testid="stSidebar"] label[data-testid="stRadioOption"] > div > div:first-child {{display: none;}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]) p {{color: {MUTED}; font-size: .95rem; transition: color .15s ease;}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]):hover {{background: #E4EAF1;}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]):hover p {{color: {NAVY}; font-weight: 600;}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]):has(input:checked) {{background: #fff; border-left-color: #8CB844; box-shadow: 0 1px 3px rgba(31, 46, 69, .10);}}
+  [data-testid="stSidebar"] :is(label[data-baseweb="radio"], label[data-testid="stRadioOption"]):has(input:checked) p {{color: {NAVY}; font-weight: 700;}}
 </style>
 """, unsafe_allow_html=True)
 
