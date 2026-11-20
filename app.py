@@ -14,6 +14,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 import pipeline as pl
+from asistente.ui import asistente_flotante
 
 # =============================================================================
 # Configuración e identidad visual
@@ -178,7 +179,7 @@ with st.sidebar:
         st.markdown('<div class="fd-brand">FD <span>⚡</span> Energy</div>', unsafe_allow_html=True)
     st.markdown('<div class="fd-tag">Gestión y eficiencia energética</div>', unsafe_allow_html=True)
     st.write("")
-    seccion = st.radio("Sección", SECCIONES, label_visibility="collapsed")
+    seccion = st.radio("Sección", SECCIONES, label_visibility="collapsed", key="seccion")
     st.divider()
 
     st.markdown("**Fuente de datos**")
@@ -690,6 +691,7 @@ def vista_alertas():
 
 VISTAS = {"Resumen general": vista_resumen, "Consumo por áreas": vista_areas, "Equipos críticos": vista_equipos,
           "Energía solar": vista_solar, "Climatización": vista_clima, "Alertas y oportunidades": vista_alertas}
+asistente_flotante(ctx, pl)   # botón flotante del asistente; va antes de la vista para conservar su posición en la página
 VISTAS[seccion]()
 
 st.markdown(f'<div style="margin-top:2.5rem;color:{MUTED};font-size:.75rem;border-top:1px solid {GRID};padding-top:.6rem">'
